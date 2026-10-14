@@ -22,6 +22,7 @@ const CLASSES = [
   { type_id: 'ai-huanlian', type_name: 'AI换脸' },
   { type_id: 'ai-mogai',   type_name: 'AI魔改' },
   { type_id: 'ranks/hot',  type_name: '排行榜' }
+  { type_id: 'chigua',  type_name: '吃瓜' }
 ];
 
 function fix(u) {
