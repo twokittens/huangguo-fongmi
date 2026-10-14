@@ -222,7 +222,7 @@ function parseRanks(html) {
     });
   }
 
-  return list.length ? list : parseGridCards(html, true);
+  return list;
 }
 
 function parseTitle(html, fallback) {
@@ -357,13 +357,24 @@ export default {
         url = SITE + '/' + id + '/' + (page > 1 ? page + '/' : '');
       }
       const html = getHtml(url);
-      const list = String(tid).indexOf('rank') !== -1 ? parseRanks(html) : parseGridCards(html, false);
+      const isRank = String(tid || '').indexOf('rank') !== -1;
+      const list = isRank ? parseRanks(html).slice(0, 20) : parseGridCards(html, false);
+      if (isRank) {
+        return JSON.stringify({
+          list: list,
+          page: 1,
+          pagecount: 1,
+          limit: 20,
+          total: 20
+        });
+      }
+      
       return JSON.stringify({
         list: list,
         page: page,
         pagecount: list.length ? page + 1 : page,
         limit: list.length || 20,
-        total: list.length ? (page + 1) * (list.length || 20) : page * 20
+        total: list.length ? (page + 1) * list.length : page * 20
       });
     } catch (e) {
       return JSON.stringify({ list: [], page: page, pagecount: page });
